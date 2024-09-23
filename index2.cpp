@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <fstream>
+#include <fstream>//for reading .csv files
 #include <sstream>
 #include <algorithm> // For shuffling teams
 using namespace std;
@@ -71,31 +71,6 @@ vector<Match> generateFixtures(const vector<FootballTeam>& teams) {
         }
     }
 
-    // Sort fixtures such that same town teams play later (to enforce rule 1)
-    stable_sort(fixtures.begin(), fixtures.end(), [&teams](const Match& a, const Match& b) {
-        return a.town != b.town; // Non-same town matches come first
-    });
-
-    // Schedule matches 4 teams per weekend (2 matches)
-    for (size_t i = 0; i < fixtures.size(); i += 2) {
-        fixtures[i].weekend = weekend;
-        if (i + 1 < fixtures.size()) {
-            fixtures[i + 1].weekend = weekend;
-        }
-        weekend++;
-    }
-
-    return fixtures;
-}
-
-// Function to display the fixtures
-void displayFixtures(const vector<Match>& fixtures) {
-    for (const auto& match : fixtures) {
-        cout << "Weekend #" << match.weekend << ": " << match.homeTeam << " vs " << match.awayTeam
-             << " at " << match.stadium << " in " << match.town
-             << " (Leg " << match.leg << ")" << endl;
-    }
-}
 
 int main() {
     // Set the file path to your CSV file
@@ -110,9 +85,6 @@ int main() {
 
     // Generate fixtures
     vector<Match> fixtures = generateFixtures(teams);
-
-    // Display the fixtures
-    displayFixtures(fixtures);
 
     return 0;
 }
